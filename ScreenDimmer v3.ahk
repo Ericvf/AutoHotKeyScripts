@@ -10,7 +10,7 @@ CapsLock & -::Decrease()
 CapsLock & =::Increase()
 ^Volume_Up::Increase()
 ^Launch_App2::Reset()
-InitScreenDimmer()
+;InitScreenDimmer()
 
 getMonitorHandle()
 {

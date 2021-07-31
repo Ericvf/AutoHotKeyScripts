@@ -1,0 +1,1 @@
+#Numpad0::WinMove, A,,0,0

@@ -1,4 +1,3 @@
-
 CapsLock & Escape Up::
 	WinHide ahk_id %Gui1%
 	Send  {LWin down}{Tab}{LWin up}

@@ -1,27 +1,13 @@
-; Screendimmer.ahk
-;----------------------------------------------------------
-; Author    : Appbyfex
-; Date      : 2014-11-10
-;----------------------------------------------------------
-
 ^Volume_Mute::Off()
 ^Volume_Down::Decrease()
 CapsLock & -::Decrease()
 CapsLock & =::Increase()
 ^Volume_Up::Increase()
 ^Launch_App2::Reset()
-;InitScreenDimmer()
 
 getMonitorHandle()
 {
   ; Initialize Monitor handle
-
-  ;MouseGetPos, xpos, ypos
-  ;point := ( ( xpos ) & 0xFFFFFFFF ) | ( ( ypos ) << 32 )
-  ; hMon := DllCall("MonitorFromPoint"
-  ;   , "int64", point ; point on monitor
-  ;   , "uint", 0) ; flag to return primary monitor on failure
-
   WinGet, winId, ID, A
   if !(hMon := DllCall("User32.dll\MonitorFromWindow", "UInt", winId, "UInt", 2))
 	{
@@ -48,12 +34,11 @@ InitScreenDimmer()
 
   try {
     IniRead,IniValue,Fex.ini,Screendimmer,ScreenDimmer
-
-	If (IniValue >= MinValue and IniValue <= MaxValue) {
-	  Value := IniValue
-	} Else {
-	  Value := 64
-	}
+    If (IniValue >= MinValue and IniValue <= MaxValue) {
+      Value := IniValue
+    } Else {
+      Value := 64
+    }
   }
   catch {
     Value := 64
@@ -102,30 +87,16 @@ UpdateUI() {
 DisplaySetBrightness( Br ) {
   global MonitorHandle
 
- ; if !MonitorHandle
   MonitorHandle := getMonitorHandle()
 
- setMonitorBrightness(MonitorHandle, Br)
-/*
- Loop, % VarSetCapacity( GR,1536 ) / 6
-   NumPut((n := (Br+128)*(A_Index-1)) > 65535 ? 65535 : n, GR, 2*(A_Index-1), "UShort")
-
- DllCall( "RtlMoveMemory", UInt,&GR+512,  UInt,&GR, UInt,512 )
- DllCall( "RtlMoveMemory", UInt,&GR+1024, UInt,&GR, UInt,512 )
- Return DllCall( "SetDeviceGammaRamp", UInt, hDC := DllCall("GetDC", UInt, 0), UInt, &GR),
-		DllCall( "ReleaseDC", UInt,0, UInt,hDC )
-    */
+  setMonitorBrightness(MonitorHandle, Br)
 }
 
-; Set volume 
 setMonitorBrightness(MonitorHandle, brightnessValue)
 {
   ; ToolTip, MonitorHandle %MonitorHandle% Value %brightnessValue%
-  
-  ; handle := getMonitorHandle()
   DllCall("dxva2\SetVCPFeature"
     , "int", MonitorHandle
     , "char", 0x10 ;VCP code for Input Source Select
     , "uint", brightnessValue)
-  ; destroyMonitorHandle(handle)
 }
